@@ -1,4 +1,4 @@
-from typing import Dict, Set
+from typing import Dict
 
 import datasets
 import transformers
@@ -56,7 +56,7 @@ def tokenize_func(example: Dict, tokenizer: transformers.PreTrainedTokenizer, ig
     return {'input_ids': input_ids, 'labels': labels}
 
 
-def load_datasets(datasets_name: str, model_name: str) -> Set[datasets.Dataset, DataCollatorForChatGLM]:
+def load_datasets(datasets_name: str, model_name: str):
     # DatasetDict({
     # train: Dataset({
     #     features: ['content', 'summary'],
@@ -91,7 +91,7 @@ def load_datasets(datasets_name: str, model_name: str) -> Set[datasets.Dataset, 
 def load_qlora_model(model_name: str):
     # QLoRA 量化配置
     q_config = BitsAndBytesConfig(load_in_4bit=True,
-                                  bnb_4bit_compute_dtype='nf4',
+                                  bnb_4bit_quant_type='nf4',
                                   bnb_4bit_use_double_quant=True,
                                   bnb_4bit_compute_dtype=compute_dtype_map['bf16'])
 
@@ -125,7 +125,7 @@ def add_adapt_2_model(kbit_model, target_modules='chatglm'):
 
 def train(qlora_model, tokenized_dataset, data_collator):
     training_args = TrainingArguments(
-        output_dir="../models/chatglm_qlora",    # 输出目录
+        output_dir="./models/chatglm_qlora",    # 输出目录
         per_device_train_batch_size=16,           # 每个设备的训练批次
         gradient_accumulation_steps=4,            # 梯度累积步数
         # per_device_eval_batch_size=8,             # 每个设备的评估批量大小
@@ -149,7 +149,7 @@ def train(qlora_model, tokenized_dataset, data_collator):
         data_collator=data_collator
     )
     trainer.train()
-    trainer.model.save_pretrained("../models/fine_tune/chatglm_qlora")
+    trainer.model.save_pretrained("./models/fine_tune/chatglm_qlora")
 
 
 if __name__ == "__main__":
