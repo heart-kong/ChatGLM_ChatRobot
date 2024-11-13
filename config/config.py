@@ -31,3 +31,6 @@ compute_dtype_map = {
     'bf16': torch.bfloat16,
     'fp32': torch.float32,
 }
+
+
+peft_model_path = "../models/fine_tune/chatglm_qlora"
