@@ -34,3 +34,7 @@ compute_dtype_map = {
 
 
 peft_model_path = "../models/fine_tune/chatglm_qlora"
+
+base_model = "gpt-3.5-turbo"
+base_api_key = "your api key"
+base_url = "https://api.agicto.cn/v1"
